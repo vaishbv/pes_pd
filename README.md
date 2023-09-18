@@ -265,3 +265,179 @@ Netlist is generated in the runs folder
 ![6](https://github.com/vaishbv/pes_pd/assets/79531808/9b538986-c431-40ce-a49a-e52a217ff89e)
 ![7](https://github.com/vaishbv/pes_pd/assets/79531808/05e37000-33dd-4452-b623-f1dd4bd6a15b)
 
+# Day 2
+## Chip Floor Planning Considerations
+
+**Utilization Factor and Aspect Ratio**
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/a1812369-af71-48c4-860c-f76af506400e)
+- We consider a simple netlist with a Launch and Capture Flop. It also has an AND and OR gate.
+- We then convert it into squares since we need appropriate dimensions
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/f7148664-ea48-420e-92a6-b5ef5ebc30fd)
+- Let us consider the areas of the gates and Flops as 1 sq unit
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/6b3f5692-c22e-4c21-857d-d689adf834f0)
+- Clubbing them together we get an area of 4 sq units
+
+- The 'core' section of a chip is where the fundamental logic design is placed.
+- The 'die' area contains the core and is a small semiconductor are on which the fundamental circuit is fabricated.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/b2c4dbb6-2b0c-477c-9696-a5fe90c282ef)
+- Now we put the netlist in the 'core' area and check the utilization.
+- Here
+```
+Utilization Factor = Area Occupied by the Netlist/Total Area of the Core
+```
+- As we can see here, there is 100% utilization and ```Utilization Factor = 1```.
+- In practical scenarios we don't go for such a high utilization factor.
+- The 'Aspect Ratio = Height/Width = 1'.
+
+**Concept of Pre Placed Cells**
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/ce3ce1b6-578f-4910-924c-d712f174e809)
+- We take the above combinational logic as an example
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/a9cd2668-26b2-41ec-9c04-cb5b1d85f2a5)
+- We split the circuit into two parts, block 1 and block 2 as shown above
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/6a468eae-b0f1-4eb7-ad74-0ba8ba42626d)
+- We extend the I/O pins and black box the boxes.
+- Now we separate the boxes and the get their respective I/O ports.
+- The use of doing this is that the users can use the blocks multiple times and form the required final circuit with ease.
+- They only need to implement the design once and it can be reused.
+- These kind of IPs have user defined locations and are placed in the chip before automated placement and routing takes place. These are called pre-placed cells.
+
+**Surrounding Pre-Placed Cells with Decoupling Capacitors**
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/10b42d05-a8a2-4a44-bd0c-08102b608e38)
+
+- Huge capacitor filled with charge. The equivalent voltage across the capacitor is similar to what the power supply produces.
+- We add the capacitor in parallel to the circuit.
+- Everytime the circuit switches it draws current from the decoupling capacitor, whereas the outer network with the power supply and other componets is used to re-charge the capacitor
+
+**Pin Placement**
+- In pin placemnt step we use the HDL netlist to determine where a specific pin should be placed in the circuit.
+- We join the common pins and try to keep the connections as effecient as possible.
+- Pins are placed in the Die area.
+
+**Steps to run FLoorplan using OpenLANE**
+- To view floorplan we type
+```
+run_floorplan
+```
+in the OpenLANE shell.
+
+![1](https://github.com/vaishbv/pes_pd/assets/79531808/dd441eda-bea5-4b73-a106-41c54d82b74d)
+
+
+- To open the Floorplan we go to the required directory that is
+```
+vsduser@vsdsquadron:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/11-09_15-36/results/floorplan
+```
+using the ```cd``` command.
+
+- Then we type the command:
+```
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+
+- The following layout is displayed
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/c3eeadc7-821f-45ce-b077-7702623e25bf)
+- We can press 's' and then 'v' to align the design to the center of the screen.
+
+- We can right click on the mouse and pess 'z' to zoom into a desired part.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/3d251ffe-c125-41be-a96e-00f2391b89fb)
+- We can see here that the I/O ports are equidistant
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/2b79ae12-8c15-44e1-b800-48981f3fc442)
+- We can check the details of the ports as follows
+  - Hover over a port with your crosshair and press 's' on your keyboard
+  - Now open the tkcon command window and type ```what```.
+  - This will show you the details of the selected port.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/2ee6d6b3-a7e9-415b-b2dd-1271d16dac2c)
+- If we zoom in a little more, we can see the tap cells.
+- They are present to prevent latch up conditions which occur in the CMOS devices
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/7e726389-8a96-4572-b6a7-59d5eb0d821a)
+- These are the standard cells that are used in the design
+
+## Library Binding and Placement
+
+**Netlist Binding and Initial Place Design**
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/9fbd1dd6-34b3-4b38-b92a-c56efe08311f)
+- In real life, the logic gates and cells do not have shapes, but are present in the form of rectangles and squares.
+- Hence they have dimensions to them and the space where they are placed must be utilized carefully
+- The above picture shows an example of a library.
+- Library consists of various kinds of cells which have different shapes and sizes, flavours and different timing information.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/adc000d3-4076-4c74-b6d3-96e3e10f311f)
+- The components of the netlist are placed in the core area.
+- They are placed according to the convenience of distance from the pins.
+- When sending signal from FF1 to FF2, according to the circuit requirements, there has to be a very fast propogation of signals. Hence, they are placed very close and buffers are added since there is a small delay for the signal from the pin to reach FF1. The buffers maintain signal integrity
+
+**Viewing the Placement**
+- To view the placement we type
+```
+run_placement
+```
+in the OpenLANE shell.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/56832e08-c84e-4c78-8a24-73e1b9bdb05f)
+- This is the result displayed. As we can see the '/picorv32a.placement.def' file is read.
+
+![2](https://github.com/vaishbv/pes_pd/assets/79531808/da01891d-37c6-4902-9975-57b2680e563c)
+
+- We move one directory up from the 'floorplan' folder using
+```
+cd ../placement/
+```
+- To view the placement design we use the command
+```
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def
+```
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/313098df-673a-466d-8cce-169a9932fcce)
+- The above is displayed.
+- All these standard cells were present at the initial layout of the floorplan.
+
+![image](https://github.com/AniruddhaN2203/pes_pd/assets/142299140/2a7cce9b-9550-4eaf-922e-8a64306f05ac)
+- If we zoom in we can see the placement of the standard cells in the standard cell rows.
+
+## Cell Design and Characterization Flow
+
+**Cell Design Flow**
+- Inputs -> Process design kits(PDKs) : DRC and LVS rules, SPICE models, library and user-defined specs.
+- Design Steps -> Circuit Design, Layout Design(Euler Path and Stick Diagram), Characterization.
+- Outputs -> CDL(Circuit Description Language), GDSII, LEF, extracted spice netlist(.cir)
+
+**Characterization Flow**
+- This is for an inverter.
+1) Read the model files.
+2) Read the extracted SPICE netlist.
+3) Recognize the behaviour of the buffer.
+4) Attaching the necessary power sources
+5) Apply the stimulus, which is the input signal to the circuit.
+6) Read the sub-circuit of the inverter.
+7) Provide necessary output capacitances.
+8) Provide the necessary simulation commands
+
+**Timing Characterization**
+- slew_low_rise_thr = 20%
+- slew_high_rise_thr = 80%
+- slew_low_fall_thr = 20%
+- slew_high_fall_thr = 80%
+- in_rise_thr = 50%
+- in_fall_thr = 50%
+- out_rise_thr = 50%
+- out_fall_thr = 50%
+
+- Propogation delay = time(out_fall_thr) - time(in_rise_thr)
+
+- Transition Time
+  - On rise: time(slew_high_rise_thr) - time(slew_low_rise_thr)
+  - On fall : time(slew_high_fall_thr) - time(slew_low_fall_thr)
