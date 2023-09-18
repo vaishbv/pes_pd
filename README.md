@@ -809,7 +809,8 @@ run_placement
 
 On zooming in 
 
-![image](https://github.com/Anirudh-Ravi123/pes_pd/assets/142154804/0d2d169b-bfc9-4857-abb8-7cdcea5ab09a)
+![sky130](https://github.com/vaishbv/pes_pd/assets/79531808/0e3f6413-d1b9-4b2c-8bce-c6d9fe9a3401)
+
 
 
 **Introduction to delay tables**
