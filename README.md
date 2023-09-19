@@ -333,7 +333,7 @@ in the OpenLANE shell.
 
 - To open the Floorplan we go to the required directory that is
 ```
-vsduser@vsdsquadron:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/11-09_15-36/results/floorplan
+vsduser@vaishnavi-bv:~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/11-09_15-36/results/floorplan
 ```
 using the ```cd``` command.
 
@@ -581,11 +581,25 @@ The design rules used by Magic's design rule checker come entirely from the tech
 
 SKY130 pdk
 SKY130 is a mature 180nm-130nm hybrid technology developed by Cypress Semiconductor that has been used for many production parts. SKY130 is now available as a foundry technology through SkyWater Technology Foundry.
+**Sky130 PDKS and Steps to Download Magic Tool**
 
 ![2](https://github.com/vaishbv/pes_pd/assets/79531808/258ca773-bbc2-43e0-a67b-6cd16155b57b)
+- Enter the command
+```
+ wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+```
 
+- Move the file to desktop using
+```
+mv drc_tests.tgz Desktop/
+```
 
 ![3](https://github.com/vaishbv/pes_pd/assets/79531808/3daea58e-3efa-40d0-8197-6b9ca825cdc1)
+- Extract the file using
+```
+tar xfz drc_tests.tgz 
+```
+- Do ```ls``` to view all the files in it.
 
 To open the software we type
 ```
