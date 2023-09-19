@@ -746,7 +746,8 @@ lef write
 
 We copy the lef file created and the sky130 library that to the src folder of picorv32a folder.
 
-![4](https://github.com/vaishbv/pes_pd/assets/79531808/301bf668-e7f4-433a-82de-b4c23cb2eccf)
+![lastone](https://github.com/vaishbv/pes_pd/assets/79531808/c44ed04b-49a8-4f06-bf82-8e122c974b61)
+
 
 ![5](https://github.com/vaishbv/pes_pd/assets/79531808/a8d5ff2b-8a75-42ed-b622-b5d8d357cb98)
 
